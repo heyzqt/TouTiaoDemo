@@ -27,9 +27,6 @@ import butterknife.Unbinder;
 
 public class NewsFragment extends Fragment {
 
-//	@BindView(R.id.textview)
-//	TextView textview;
-
 	@BindView(R.id.recyclerview)
 	RecyclerView mRecyclerView;
 
@@ -54,7 +51,6 @@ public class NewsFragment extends Fragment {
 		initView();
 		Bundle bundle = getArguments();
 		String str = bundle.getString("text");
-		//textview.setText(str);
 		return view;
 	}
 
@@ -64,6 +60,8 @@ public class NewsFragment extends Fragment {
 
 	void initView() {
 		RecyclerViewAdapter adapter = new RecyclerViewAdapter(mNews);
+//		mRecyclerView.addItemDecoration(
+//				new ItemLineDividerDecoration(LinearLayoutManager.VERTICAL));
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
 				.VERTICAL, false));
 		mRecyclerView.setAdapter(adapter);

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.heyzqt.toutiaodemo.R;
 import com.heyzqt.toutiaodemo.bean.News;
+import com.heyzqt.toutiaodemo.util.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +37,42 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		System.out.println("onBindViewHolder");
 		ViewHolderOne holderOne = (ViewHolderOne) holder;
 		holderOne.title.setText(datas.get(position).getTitle());
-		holderOne.imgOne.setImageResource(R.mipmap.ic_launcher);
-		holderOne.imgTwo.setImageResource(R.mipmap.ic_launcher);
-		holderOne.imgThree.setImageResource(R.mipmap.ic_launcher);
+		if (datas.get(position).getIsLarge()) {
+			holderOne.imgOne.setVisibility(View.GONE);
+			holderOne.imgTwo.setVisibility(View.GONE);
+			holderOne.imgThree.setVisibility(View.GONE);
+			holderOne.bigImg.setVisibility(View.VISIBLE);
+
+			GlideApp.with(holder.itemView.getContext())
+					.load(datas.get(position).getPicOne())
+					.placeholder(R.mipmap.loading)
+					.fitCenter()
+					.into(holderOne.bigImg);
+		} else {
+			holderOne.imgOne.setImageResource(R.mipmap.ic_launcher);
+			holderOne.imgTwo.setImageResource(R.mipmap.ic_launcher);
+			holderOne.imgThree.setImageResource(R.mipmap.ic_launcher);
+			holderOne.bigImg.setVisibility(View.GONE);
+			holderOne.imgOne.setVisibility(View.VISIBLE);
+			holderOne.imgTwo.setVisibility(View.VISIBLE);
+			holderOne.imgThree.setVisibility(View.VISIBLE);
+
+			GlideApp.with(holder.itemView.getContext())
+					.load(datas.get(position).getPicOne())
+					.placeholder(R.mipmap.loading)
+					.fitCenter()
+					.into(holderOne.imgOne);
+			GlideApp.with(holder.itemView.getContext())
+					.load(datas.get(position).getPicTwo())
+					.placeholder(R.mipmap.loading)
+					.fitCenter()
+					.into(holderOne.imgTwo);
+			GlideApp.with(holder.itemView.getContext())
+					.load(datas.get(position).getPicThr())
+					.placeholder(R.mipmap.loading)
+					.fitCenter()
+					.into(holderOne.imgThree);
+		}
 		holderOne.source.setText(datas.get(position).getSource());
 		StringBuilder comment = new StringBuilder();
 		comment.append(datas.get(position).getCommentNum()).append("评论");
