@@ -1,7 +1,9 @@
 package com.heyzqt.toutiaodemo.activity;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.heyzqt.toutiaodemo.R;
+import com.heyzqt.toutiaodemo.adapter.NewsAdapter;
 import com.heyzqt.toutiaodemo.bean.ChannelItem;
+import com.heyzqt.toutiaodemo.fragment.NewsFragment;
 import com.heyzqt.toutiaodemo.util.ScreenUtil;
 import com.heyzqt.toutiaodemo.widget.CustomHorizontalScrollView;
 
@@ -21,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
 	@BindView(R.id.scroll_tab)
 	RelativeLayout mScrollAllRelaLayout;
@@ -41,10 +45,17 @@ public class MainActivity extends AppCompatActivity {
 	@BindView(R.id.add_img)
 	ImageView mAddImg;
 
+	@BindView(R.id.viewpager)
+	ViewPager mViewPager;
+
 	int mScreenWidth;
 	int itemWidth;
+	int saveCurPosition = 0;
 
 	List<ChannelItem> mChannelItems = new ArrayList<>();
+	List<NewsFragment> mFragments = new ArrayList<>();
+
+	private static final String TAG = "MainActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +79,12 @@ public class MainActivity extends AppCompatActivity {
 			ChannelItem channelItem = new ChannelItem(str[i], i, false);
 			mChannelItems.add(channelItem);
 		}
-		mChannelItems.get(0).isSelected = true;
+		mChannelItems.get(saveCurPosition).isSelected = true;
 	}
 
 	void initView() {
 		initTabView();
+		initFragments();
 	}
 
 	void initTabView() {
@@ -102,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
 							child.setSelected(false);
 						} else {
 							child.setSelected(true);
+							mViewPager.setCurrentItem(j);
+							saveCurPosition = j;
 						}
 					}
 
@@ -111,5 +125,75 @@ public class MainActivity extends AppCompatActivity {
 			});
 			mScrollLinearLayout.addView(textView, i, params);
 		}
+	}
+
+	void initFragments() {
+		mFragments.clear();
+		int count = mChannelItems.size();
+		for (int i = 0; i < count; i++) {
+			NewsFragment newsFragment = new NewsFragment();
+			Bundle bundle = new Bundle();
+			bundle.putString("text", mChannelItems.get(i).title);
+			newsFragment.setArguments(bundle);
+			mFragments.add(newsFragment);
+		}
+		mViewPager.setAdapter(
+				new NewsAdapter<NewsFragment>(getSupportFragmentManager(), mFragments));
+		mViewPager.addOnPageChangeListener(this);
+		mViewPager.setCurrentItem(0);
+	}
+
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		selectTab(position);
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int state) {
+	}
+
+	void selectTab(int pos) {
+		saveCurPosition = pos;
+
+		//更新字体的状态
+		for (int i = 0; i < mScrollLinearLayout.getChildCount(); i++) {
+			TextView textView = (TextView) mScrollLinearLayout.getChildAt(i);
+			if (i == pos) {
+				textView.setSelected(true);
+			} else {
+				textView.setSelected(false);
+			}
+		}
+
+
+		mHorizontalScrollView.smoothScrollTo(0, 0);
+
+		Log.i(TAG, "selectTab: pos = " + pos);
+		for (int i = 0; i < mScrollLinearLayout.getChildCount(); i++) {
+			View focusView = mScrollLinearLayout.getChildAt(i);
+			if (saveCurPosition == i) {
+				Log.i(TAG, "selectTab: width = " + focusView.getWidth());
+				Log.i(TAG, "selectTab: getMeasuredWidth = " + focusView.getMeasuredWidth());
+				Log.i(TAG, "selectTab: getLeft = " + focusView.getLeft());
+				Log.i(TAG, "selectTab: getRight = " + focusView.getRight());
+			}
+		}
+
+		//for (int i = 0; i < mScrollLinearLayout.getChildCount(); i++) {
+		View checkView = mScrollLinearLayout.getChildAt(pos);
+		int k = checkView.getMeasuredWidth();
+		int l = checkView.getLeft();
+		int i2 = l + k / 2 - mScreenWidth / 2;
+		// rg_nav_content.getParent()).smoothScrollTo(i2, 0);
+		mHorizontalScrollView.smoothScrollTo(i2, 0);
+		// mColumnHorizontalScrollView.smoothScrollTo((position - 2) *
+		// mItemWidth , 0);
+		//}
+
 	}
 }
