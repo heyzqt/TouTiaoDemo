@@ -1,11 +1,16 @@
 package com.heyzqt.toutiaodemo.activity;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,8 +29,15 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+
+	@BindView(R.id.edit_search)
+	EditText mEditText;
+
+	@BindView(R.id.img_camera)
+	ImageView mCameraBtn;
 
 	@BindView(R.id.scroll_tab)
 	RelativeLayout mScrollAllRelaLayout;
@@ -68,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		itemWidth = mScreenWidth / 7;
 
 		initData();
+		initStatusbarColor();
 		initView();
 	}
 
@@ -82,7 +95,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		mChannelItems.get(saveCurPosition).isSelected = true;
 	}
 
+	void initStatusbarColor() {
+		//设置状态栏的颜色
+		Window window = this.getWindow();
+		window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		window.setStatusBarColor(ContextCompat.getColor(this, R.color.status_red));
+	}
+
 	void initView() {
+		mEditText.setInputType(InputType.TYPE_NULL);
+
 		initTabView();
 		initFragments();
 	}
@@ -195,5 +218,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		// mItemWidth , 0);
 		//}
 
+	}
+
+	@OnClick(R.id.img_camera)
+	public void onClick(View view) {
+		Toast.makeText(this, "click camera", Toast.LENGTH_SHORT).show();
+	}
+
+	@OnClick(R.id.edit_search)
+	public void onClickEdittext(View view) {
+		Toast.makeText(this, "click search", Toast.LENGTH_SHORT).show();
 	}
 }
