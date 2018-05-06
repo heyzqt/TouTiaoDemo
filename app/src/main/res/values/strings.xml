@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TouTiaoDemo</string>
+    <string name="home_btn">首页</string>
+    <string name="video_btn">西瓜视频</string>
+    <string name="toutiao_btn">微头条</string>
+    <string name="unlogin_btn">未登录</string>
+    <string name="login_btn">我的</string>
+</resources>
