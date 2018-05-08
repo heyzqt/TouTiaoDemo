@@ -61,11 +61,11 @@ public class ChannelGridViewAdapter extends BaseAdapter {
 			holder.title = view.findViewById(R.id.title);
 			view.setTag(holder);
 			view.setTag(R.integer.grid_pos, i);
-			System.out.println("set tag " + i + ", holder = " + holder);
+			//System.out.println("set tag " + i + ", holder = " + holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
-			System.out.println(
-					"get tag " + view.getTag(R.integer.grid_pos) + ",holder = " + holder);
+//			System.out.println(
+//					"get tag " + view.getTag(R.integer.grid_pos) + ",holder = " + holder);
 		}
 
 		holder.title.setText(mChannelItems.get(i).title);
@@ -101,5 +101,13 @@ public class ChannelGridViewAdapter extends BaseAdapter {
 
 	public void setOnTouchMoveListener(OnTouchMoveListener listener) {
 		mMoveListener = listener;
+	}
+
+	public void exchangeItemPos(int oldPos, int newPos) {
+		ChannelItem oldItem = mChannelItems.get(oldPos);
+		ChannelItem newItem = mChannelItems.get(newPos);
+		mChannelItems.set(oldPos, newItem);
+		mChannelItems.set(newPos, oldItem);
+		notifyDataSetChanged();
 	}
 }
