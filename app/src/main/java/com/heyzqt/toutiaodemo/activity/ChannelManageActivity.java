@@ -2,7 +2,11 @@ package com.heyzqt.toutiaodemo.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageButton;
 
 import com.heyzqt.toutiaodemo.R;
 import com.heyzqt.toutiaodemo.bean.ChannelItem;
@@ -14,12 +18,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by heyzqt on 2018/5/7.
  */
 
 public class ChannelManageActivity extends AppCompatActivity {
+
+	@BindView(R.id.close_btn)
+	ImageButton mCloseBtn;
 
 	@BindView(R.id.my_channel_gridview)
 	ChannelGridView mChannelGridView;
@@ -40,6 +48,7 @@ public class ChannelManageActivity extends AppCompatActivity {
 
 		initData();
 		initView();
+		initStatusbarColor();
 	}
 
 	void initData() {
@@ -52,6 +61,19 @@ public class ChannelManageActivity extends AppCompatActivity {
 	void initView() {
 		mChannelGridViewAdapter = new ChannelGridViewAdapter(mChannels);
 		mChannelGridView.setAdapter(mChannelGridViewAdapter);
+	}
+
+	void initStatusbarColor() {
+		//设置状态栏的颜色
+		Window window = this.getWindow();
+		window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		window.setStatusBarColor(ContextCompat.getColor(this, R.color.status_red));
+	}
+
+	@OnClick(R.id.close_btn)
+	void onClick() {
+		finish();
 	}
 
 }

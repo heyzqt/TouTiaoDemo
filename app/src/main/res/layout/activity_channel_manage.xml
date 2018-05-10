@@ -8,8 +8,11 @@
 
     <ImageButton
         android:id="@+id/close_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50px"
+        android:layout_height="50px"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
         android:src="@mipmap/close_icon"/>
 
     <RelativeLayout
