@@ -1,6 +1,5 @@
 package com.heyzqt.toutiaodemo.widget;
 
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +22,9 @@ public class ChannelGridViewAdapter extends BaseAdapter {
 
 	List<ChannelItem> mChannelItems;
 
-	int curPressPos;
+	int curPos = -1;
 
-	View curPressView;
-
-	OnTouchMoveListener mMoveListener;
+	boolean isMove = false;
 
 	public ChannelGridViewAdapter(List<ChannelItem> datas) {
 		this.mChannelItems = datas;
@@ -53,36 +50,30 @@ public class ChannelGridViewAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int i, View view, ViewGroup viewGroup) {
-		ViewHolder holder;
-		if (view == null) {
-			view = LayoutInflater.from(viewGroup.getContext()).inflate(
-					R.layout.item_my_channel_grid_view, viewGroup, false);
-			holder = new ViewHolder(view);
-			holder.title = view.findViewById(R.id.title);
-			view.setTag(holder);
-			view.setTag(R.integer.grid_pos, i);
-			//System.out.println("set tag " + i + ", holder = " + holder);
-		} else {
-			holder = (ViewHolder) view.getTag();
-//			System.out.println(
-//					"get tag " + view.getTag(R.integer.grid_pos) + ",holder = " + holder);
+//		ViewHolder holder;
+//		if (view == null) {
+//			view = LayoutInflater.from(viewGroup.getContext()).inflate(
+//					R.layout.item_my_channel_grid_view, null, false);
+//			holder = new ViewHolder(view);
+//			holder.title = view.findViewById(R.id.title);
+//			view.setTag(holder);
+//			//view.setTag(R.integer.grid_pos, i);
+//			//System.out.println("set tag " + i + ", holder = " + holder);
+//		} else {
+//			holder = (ViewHolder) view.getTag();
+////			System.out.println(
+////					"get tag " + view.getTag(R.integer.grid_pos) + ",holder = " + holder);
+//		}
+
+		view = LayoutInflater.from(viewGroup.getContext()).inflate(
+				R.layout.item_my_channel_grid_view, null, false);
+		TextView title = view.findViewById(R.id.title);
+
+		title.setText(mChannelItems.get(i).title);
+
+		if (i == curPos && isMove) {
+			view.setVisibility(View.INVISIBLE);
 		}
-
-		holder.title.setText(mChannelItems.get(i).title);
-		if (mChannelItems.get(i).isSelected) {
-			holder.title.setTextColor(
-					ContextCompat.getColor(viewGroup.getContext(), R.color.colorAccent));
-		}
-
-		holder.title.setOnLongClickListener(new View.OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View view) {
-				curPressPos = i;
-				curPressView = view;
-				return false;
-			}
-		});
-
 		return view;
 	}
 
@@ -95,19 +86,12 @@ public class ChannelGridViewAdapter extends BaseAdapter {
 		}
 	}
 
-	interface OnTouchMoveListener {
-		void touchMove();
-	}
-
-	public void setOnTouchMoveListener(OnTouchMoveListener listener) {
-		mMoveListener = listener;
-	}
-
-	public void exchangeItemPos(int oldPos, int newPos) {
-		ChannelItem oldItem = mChannelItems.get(oldPos);
-		ChannelItem newItem = mChannelItems.get(newPos);
-		mChannelItems.set(oldPos, newItem);
-		mChannelItems.set(newPos, oldItem);
+	public void exchangeItemPos(int oldPos, int newPos, boolean isMove) {
+		ChannelItem channel = mChannelItems.get(oldPos);
+		mChannelItems.remove(oldPos);
+		mChannelItems.add(newPos, channel);
+		curPos = newPos;
+		this.isMove = isMove;
 		notifyDataSetChanged();
 	}
 }

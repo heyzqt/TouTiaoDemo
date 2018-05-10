@@ -2,7 +2,6 @@ package com.heyzqt.toutiaodemo.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.provider.Settings;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -45,13 +43,6 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 	float itemWidthDex;
 	float itemHeightDex;
 
-	/**
-	 * GridView相对于屏幕左侧的宽度
-	 * GridView相对于屏幕上侧的高度
-	 */
-	int widthWindowDex;
-	int heightWindowDex;
-
 	int savePositioin = 0;
 	int tempPosition = 0;
 
@@ -78,8 +69,6 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 			return false;
 		}
 
-		Log.i(TAG, "onItemLongClick: ");
-
 		Log.i(TAG, "onItemLongClick: view x = " + view.getX() + ",y = " + view.getY());
 		this.view = view;
 		this.savePositioin = position;
@@ -88,6 +77,7 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 		this.itemHeightDex = mWindowY - this.getTop() - view.getTop();
 
 		Log.i(TAG, "onItemLongClick: view = " + view);
+		Log.i(TAG, "onItemLongClick: itemWidthDex = " + itemWidthDex + ",viewX = " + view.getX());
 		//Android系统6.0及以上悬浮窗权限动态申请
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if (Settings.canDrawOverlays(getContext())) {
@@ -111,8 +101,6 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 			case MotionEvent.ACTION_DOWN:
 				mWindowX = ev.getRawX();
 				mWindowY = ev.getRawY();
-				widthWindowDex = (int) (mWindowX - ev.getX());
-				heightWindowDex = (int) (mWindowY - ev.getY());
 				Log.i(TAG, "onTouchEvent: ACTION_DOWN");
 				break;
 			case MotionEvent.ACTION_MOVE:
@@ -137,10 +125,8 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 	void initWindow() {
 		//初始化ImageView
 		if (dragView == null) {
-			dragView = View.inflate(getContext(), R.layout.item_my_channel_grid_view, null);
 			Log.i(TAG, "initWindow: drag view init");
-			//dragView = new ImageView(getContext());
-			//dragView.setImageBitmap(getDragBitmap(curPositioin));
+			dragView = View.inflate(getContext(), R.layout.item_my_channel_grid_view, null);
 			TextView textView = dragView.findViewById(R.id.title);
 			TextView realText = view.findViewById(R.id.title);
 			textView.setText(realText.getText());
@@ -152,8 +138,8 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 			mLayoutParams.alpha = 0.5f;
 			mLayoutParams.format = PixelFormat.RGBA_8888;
 			mLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-			mLayoutParams.width = (int) (view.getWidth() * 1.2f);
-			mLayoutParams.height = (int) (view.getHeight() * 1.2f);
+			mLayoutParams.width = (int) (view.getWidth() * 1.1f);
+			mLayoutParams.height = (int) (view.getHeight() * 1.1f);
 			Log.i(TAG, "initWindow: dragwiew width = " + dragView.getWidth() + ",dragview height"
 					+ " = "
 					+ dragView.getHeight());
@@ -174,15 +160,6 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 		dragMode = MODE_DRAG;
 	}
 
-	Bitmap getDragBitmap(int pos) {
-		ViewGroup group = (ViewGroup) getChildAt(pos - getFirstVisiblePosition());
-		Log.i(TAG, "getDragBitmap: pos = " + pos + " getFirstVisiblePosition = " +
-				getFirstVisiblePosition());
-		group.destroyDrawingCache();
-		group.setDrawingCacheEnabled(true);
-		return Bitmap.createBitmap(group.getDrawingCache());
-	}
-
 	void updateWindow(MotionEvent event) {
 		if (mLayoutParams != null) {
 			float x = event.getRawX() - itemWidthDex;
@@ -196,6 +173,7 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 		int x = (int) event.getX();
 		int y = (int) event.getY();
 		int dropPos = pointToPosition(x, y);
+		Log.i(TAG, "updateWindow: dropPos = " + dropPos);
 		if (dropPos == tempPosition || dropPos == GridView.INVALID_POSITION) {
 			return;
 		}
@@ -213,7 +191,7 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 	}
 
 
-	void itemMove(int dropPos) {
+	void itemMove(final int dropPos) {
 		TranslateAnimation translateAnimation;
 		//当停止的item位置在原来item位置的前面时
 		if (dropPos < tempPosition) {
@@ -223,7 +201,7 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 				float xValue = (nextView.getLeft() - view.getLeft()) * 1.0f / view.getWidth();
 				float yValue = (nextView.getTop() - view.getTop()) * 1.0f / view.getHeight();
 				translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
-						Animation.RELATIVE_TO_SELF, xValue, Animation.RELATIVE_TO_PARENT, 0,
+						Animation.RELATIVE_TO_SELF, xValue, Animation.RELATIVE_TO_SELF, 0,
 						Animation.RELATIVE_TO_SELF, yValue);
 				translateAnimation.setFillAfter(true);
 				translateAnimation.setInterpolator(new LinearInterpolator());
@@ -238,10 +216,10 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 			for (int i = tempPosition + 1; i <= dropPos; i++) {
 				View view = getChildAt(i);
 				View prevView = getChildAt(i - 1);
-				float xValue = (view.getLeft() - prevView.getLeft()) * 1.0f / view.getWidth();
-				float yValue = (view.getTop() - prevView.getTop()) * 1.0f / view.getHeight();
+				float xValue = (prevView.getLeft() - view.getLeft()) * 1.0f / view.getWidth();
+				float yValue = (prevView.getTop() - view.getTop()) * 1.0f / view.getHeight();
 				translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
-						Animation.RELATIVE_TO_SELF, xValue, Animation.RELATIVE_TO_PARENT, 0,
+						Animation.RELATIVE_TO_SELF, xValue, Animation.RELATIVE_TO_SELF, 0,
 						Animation.RELATIVE_TO_SELF, yValue);
 				translateAnimation.setFillAfter(true);
 				translateAnimation.setInterpolator(new LinearInterpolator());
@@ -251,8 +229,8 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 				}
 				view.startAnimation(translateAnimation);
 			}
-
 		}
+		Log.i(TAG, "itemMove: tempPos 1111111111 dropPos = " + dropPos);
 		tempPosition = dropPos;
 	}
 
@@ -264,10 +242,11 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 
 		@Override
 		public void onAnimationEnd(Animation animation) {
-			Log.i(TAG, "onAnimationEnd: ");
+			Log.i(TAG, "onAnimationEnd: 22222222");
 			ListAdapter adapter = getAdapter();
 			if (adapter != null && adapter instanceof ChannelGridViewAdapter) {
-				((ChannelGridViewAdapter) adapter).exchangeItemPos(savePositioin, tempPosition);
+				((ChannelGridViewAdapter) adapter).exchangeItemPos(savePositioin, tempPosition,
+						true);
 			}
 			savePositioin = tempPosition;
 		}
@@ -282,13 +261,20 @@ public class ChannelGridView extends GridView implements AdapterView.OnItemLongC
 	//当手指抬起结束排序时
 	void itemDrop() {
 		if (tempPosition == savePositioin || tempPosition == GridView.INVALID_POSITION) {
-			getChildAt(tempPosition).setVisibility(View.VISIBLE);
+			getChildAt(savePositioin).setVisibility(View.VISIBLE);
+			Log.i(TAG,
+					"itemDrop: savePos"
+							+ " = "
+							+
+							savePositioin);
 		} else {
 			//更新集合顺序
 			ListAdapter adapter = getAdapter();
 			if (adapter != null && adapter instanceof ChannelGridViewAdapter) {
-				((ChannelGridViewAdapter) adapter).exchangeItemPos(savePositioin, tempPosition);
+				((ChannelGridViewAdapter) adapter).exchangeItemPos(savePositioin, tempPosition,
+						false);
 			}
+			Log.i(TAG, "itemDrop: update View data");
 		}
 	}
 }
