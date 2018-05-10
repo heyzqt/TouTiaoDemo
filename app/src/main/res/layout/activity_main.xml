@@ -103,6 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/home_bottom_background"
         android:orientation="horizontal"
         android:weightSum="4">
 
@@ -111,19 +112,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/home_img"
-                android:layout_width="50px"
-                android:layout_height="50px"
-                android:src="@mipmap/ic_launcher"/>
+                android:layout_width="@dimen/home_bottom_img_width"
+                android:layout_height="@dimen/home_bottom_img_height"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/home_icon_selector"
+                android:clickable="true"
+                android:focusable="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/home_img"
-                android:text="@string/home_btn"/>
+                android:layout_centerHorizontal="true"
+                android:text="@string/home_btn"
+                android:textSize="@dimen/font_small"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -131,19 +137,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/video_img"
-                android:layout_width="50px"
-                android:layout_height="50px"
-                android:src="@mipmap/ic_launcher"/>
+                android:layout_width="@dimen/home_bottom_img_width"
+                android:layout_height="@dimen/home_bottom_img_height"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/play_icon_selector"
+                android:clickable="true"
+                android:focusable="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/video_img"
-                android:text="@string/video_btn"/>
+                android:layout_centerHorizontal="true"
+                android:text="@string/video_btn"
+                android:textSize="@dimen/font_small"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -151,20 +162,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/toutiao_img"
-                android:layout_width="50px"
-                android:layout_height="50px"
-                android:src="@mipmap/ic_launcher"/>
+                android:layout_width="@dimen/home_bottom_img_width"
+                android:layout_height="@dimen/home_bottom_img_height"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/msg_icon_selector"
+                android:clickable="true"
+                android:focusable="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/toutiao_img"
-                android:gravity="center_horizontal"
-                android:text="@string/toutiao_btn"/>
+                android:layout_centerHorizontal="true"
+                android:text="@string/toutiao_btn"
+                android:textSize="@dimen/font_small"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -172,19 +187,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/person_img"
-                android:layout_width="64px"
-                android:layout_height="64px"
-                android:src="@mipmap/ic_launcher"/>
+                android:layout_width="@dimen/home_bottom_img_width"
+                android:layout_height="@dimen/home_bottom_img_height"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/person_icon_selector"
+                android:clickable="true"
+                android:focusable="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/person_img"
-                android:text="@string/unlogin_btn"/>
+                android:layout_centerHorizontal="true"
+                android:text="@string/unlogin_btn"
+                android:textSize="@dimen/font_small"/>
         </RelativeLayout>
 
     </LinearLayout>

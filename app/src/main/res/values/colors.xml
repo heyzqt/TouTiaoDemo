@@ -14,4 +14,6 @@
     <color name="header_red">#C44944</color>
 
     <color name="my_channel_gridview_item_background">#f4f5f9</color>
+
+    <color name="home_bottom_background">#f4f5f6</color>
 </resources>

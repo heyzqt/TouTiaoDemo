@@ -14,6 +14,10 @@
     <!-- 新闻item的相关尺寸参数 -->
     <dimen name="font_title">15sp</dimen>
 
+    <!-- Home首页底部栏的相关参数-->
+    <dimen name="home_bottom_img_width">23dp</dimen>
+    <dimen name="home_bottom_img_height">23dp</dimen>
+
     <dimen name="item_grid_width">80dp</dimen>
     <dimen name="item_grid_height">40dp</dimen>
 </resources>

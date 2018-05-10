@@ -32,7 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
+		View.OnClickListener {
 
 	@BindView(R.id.edit_search)
 	EditText mEditText;
@@ -61,9 +62,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	@BindView(R.id.viewpager)
 	ViewPager mViewPager;
 
+	@BindView(R.id.home_img)
+	ImageView mHomeIcon;
+
+	@BindView(R.id.video_img)
+	ImageView mVideoIcon;
+
+	@BindView(R.id.toutiao_img)
+	ImageView mToutiaoIcon;
+
+	@BindView(R.id.person_img)
+	ImageView mPersonIcon;
+
 	int mScreenWidth;
 	int itemWidth;
 	int saveCurPosition = 0;
+
+	int chooseBottomPos = 0;
 
 	List<ChannelItem> mChannelItems = new ArrayList<>();
 	List<NewsFragment> mFragments = new ArrayList<>();
@@ -83,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		initData();
 		initStatusbarColor();
 		initView();
+		initBottomView(0);
 	}
 
 	void initData() {
@@ -109,6 +125,35 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 		initTabView();
 		initFragments();
+	}
+
+	void initBottomView(int pos) {
+		switch (pos) {
+			case 0:
+				mHomeIcon.setSelected(true);
+				mVideoIcon.setSelected(false);
+				mToutiaoIcon.setSelected(false);
+				mPersonIcon.setSelected(false);
+				break;
+			case 1:
+				mHomeIcon.setSelected(false);
+				mVideoIcon.setSelected(true);
+				mToutiaoIcon.setSelected(false);
+				mPersonIcon.setSelected(false);
+				break;
+			case 2:
+				mHomeIcon.setSelected(false);
+				mVideoIcon.setSelected(false);
+				mToutiaoIcon.setSelected(true);
+				mPersonIcon.setSelected(false);
+				break;
+			case 3:
+				mHomeIcon.setSelected(false);
+				mVideoIcon.setSelected(false);
+				mToutiaoIcon.setSelected(false);
+				mPersonIcon.setSelected(true);
+				break;
+		}
 	}
 
 	void initTabView() {
@@ -236,5 +281,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	public void onClick(ImageView view) {
 		Intent intent = new Intent(this, ChannelManageActivity.class);
 		startActivity(intent);
+	}
+
+	@OnClick({R.id.home_img, R.id.video_img, R.id.toutiao_img, R.id.person_img})
+	public void onClickBottom(ImageView view) {
+		switch (view.getId()) {
+			case R.id.home_img:
+				initBottomView(0);
+				break;
+			case R.id.video_img:
+				initBottomView(1);
+				break;
+			case R.id.toutiao_img:
+				initBottomView(2);
+				break;
+			case R.id.person_img:
+				initBottomView(3);
+				break;
+		}
 	}
 }
