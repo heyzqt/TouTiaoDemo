@@ -55,7 +55,8 @@
             <com.heyzqt.toutiaodemo.widget.CustomHorizontalScrollView
                 android:id="@+id/horizontalscrollview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -74,12 +75,19 @@
 
             <ImageView
                 android:id="@+id/add_img"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/add_white_background"
                 android:src="@mipmap/add_icon"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/divider_gray"/>
     </RelativeLayout>
 
 

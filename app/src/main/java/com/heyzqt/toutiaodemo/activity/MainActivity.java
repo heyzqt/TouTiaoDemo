@@ -1,5 +1,6 @@
 package com.heyzqt.toutiaodemo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 			final TextView textView = new TextView(this);
 			textView.setGravity(Gravity.CENTER);
 			textView.setPadding(5, 5, 5, 5);
+			textView.setTextSize(16);
 			textView.setText(mChannelItems.get(i).title);
 			textView.setTextColor(
 					getResources().getColorStateList(R.color.top_category_scroll_text_color));
@@ -228,5 +230,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	@OnClick(R.id.edit_search)
 	public void onClickEdittext(View view) {
 		Toast.makeText(this, "click search", Toast.LENGTH_SHORT).show();
+	}
+
+	@OnClick(R.id.add_img)
+	public void onClick(ImageView view) {
+		Intent intent = new Intent(this, ChannelManageActivity.class);
+		startActivity(intent);
 	}
 }
