@@ -86,8 +86,12 @@ public class DataUtil {
 			} else {
 				news.setIsLarge(false);
 			}
-			if (i == 2) {
-				news.setComment("评论部分，说的非常好。");
+			if (i == 2 || i == 4) {
+				//news.setComment("评论部分，说的非常好。");
+				news.setTitle("40多天两度会晤，习近平同金正恩谈了哪些大事");
+				String url = "https://www.toutiao.com/a6553545257034711565/";
+				news.setSource_url(url);
+				url_list.clear();
 			}
 
 			if (i <= 2) {

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.heyzqt.toutiaodemo.R;
 import com.heyzqt.toutiaodemo.bean.News;
@@ -33,9 +34,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	}
 
 	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+	public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 		System.out.println("onBindViewHolder");
-		ViewHolderOne holderOne = (ViewHolderOne) holder;
+		final ViewHolderOne holderOne = (ViewHolderOne) holder;
 		holderOne.title.setText(datas.get(position).getTitle());
 		if (datas.get(position).getIsLarge()) {
 			holderOne.imgOne.setVisibility(View.GONE);
@@ -49,29 +50,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 					.fitCenter()
 					.into(holderOne.bigImg);
 		} else {
-			holderOne.imgOne.setImageResource(R.mipmap.ic_launcher);
-			holderOne.imgTwo.setImageResource(R.mipmap.ic_launcher);
-			holderOne.imgThree.setImageResource(R.mipmap.ic_launcher);
-			holderOne.bigImg.setVisibility(View.GONE);
-			holderOne.imgOne.setVisibility(View.VISIBLE);
-			holderOne.imgTwo.setVisibility(View.VISIBLE);
-			holderOne.imgThree.setVisibility(View.VISIBLE);
+			if (datas.get(position).getPicList().size() == 0) {
+				// 仅仅显示文字
+				holderOne.bigImg.setVisibility(View.GONE);
+				holderOne.imgOne.setVisibility(View.GONE);
+				holderOne.imgTwo.setVisibility(View.GONE);
+				holderOne.imgThree.setVisibility(View.GONE);
+			} else {
+				holderOne.imgOne.setImageResource(R.mipmap.ic_launcher);
+				holderOne.imgTwo.setImageResource(R.mipmap.ic_launcher);
+				holderOne.imgThree.setImageResource(R.mipmap.ic_launcher);
+				holderOne.bigImg.setVisibility(View.GONE);
+				holderOne.imgOne.setVisibility(View.VISIBLE);
+				holderOne.imgTwo.setVisibility(View.VISIBLE);
+				holderOne.imgThree.setVisibility(View.VISIBLE);
 
-			GlideApp.with(holder.itemView.getContext())
-					.load(datas.get(position).getPicOne())
-					.placeholder(R.mipmap.loading)
-					.fitCenter()
-					.into(holderOne.imgOne);
-			GlideApp.with(holder.itemView.getContext())
-					.load(datas.get(position).getPicTwo())
-					.placeholder(R.mipmap.loading)
-					.fitCenter()
-					.into(holderOne.imgTwo);
-			GlideApp.with(holder.itemView.getContext())
-					.load(datas.get(position).getPicThr())
-					.placeholder(R.mipmap.loading)
-					.fitCenter()
-					.into(holderOne.imgThree);
+				GlideApp.with(holder.itemView.getContext())
+						.load(datas.get(position).getPicOne())
+						.placeholder(R.mipmap.loading)
+						.fitCenter()
+						.into(holderOne.imgOne);
+				GlideApp.with(holder.itemView.getContext())
+						.load(datas.get(position).getPicTwo())
+						.placeholder(R.mipmap.loading)
+						.fitCenter()
+						.into(holderOne.imgTwo);
+				GlideApp.with(holder.itemView.getContext())
+						.load(datas.get(position).getPicThr())
+						.placeholder(R.mipmap.loading)
+						.fitCenter()
+						.into(holderOne.imgThree);
+			}
 		}
 		holderOne.source.setText(datas.get(position).getSource());
 		StringBuilder comment = new StringBuilder();
@@ -80,6 +89,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		StringBuilder time = new StringBuilder();
 		time.append(datas.get(position).getPublishTime()).append("时间");
 		holderOne.time.setText(time);
+
+		holderOne.moreBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Toast.makeText(view.getContext(), "smile face " + position,
+						Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 
 	@Override
